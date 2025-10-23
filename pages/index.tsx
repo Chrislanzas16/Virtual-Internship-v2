@@ -7,9 +7,12 @@ import { BiCrown } from "react-icons/bi";
 import { BsStarHalf } from "react-icons/bs";
 import { RiLeafLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
+import { useAppDispatch } from "@/redux/store";
+import { open } from "@/redux/authModalSlice";
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const dispatch = useAppDispatch()
 
   const leftHeadings = [
     "Enhance your knowledge",
@@ -88,6 +91,7 @@ export default function Home() {
                 </div>
                 <button
                   className={`${styles["btn"]} ${styles["home__cta--btn"]}`}
+                  onClick={()=>dispatch(open('login'))}
                 >
                   Login
                 </button>
@@ -298,6 +302,7 @@ export default function Home() {
             <div className={styles["reviews__btn--wrapper"]}>
               <button
                 className={`${styles["btn"]} ${styles["home__cta--btn"]}`}
+                onClick={()=>dispatch(open('login'))}
               >
                 Login
               </button>

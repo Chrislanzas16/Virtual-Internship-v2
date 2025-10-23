@@ -76,7 +76,7 @@
   }
 }
 
-/* HOME */
+
 .section__title {
   font-size: 32px;
   color: #032b41;
@@ -85,7 +85,7 @@
   font-weight: bold;
 }
 
-/* NAVBAR */
+
 .nav {
   height: 80px;
 }
@@ -129,7 +129,7 @@
   cursor: pointer;
 }
 
-/* LANDING */
+
 .landing__wrapper {
   display: flex;
 }
@@ -165,7 +165,7 @@
   line-height: 1.5;
 }
 
-/* FEATURES */
+
 .features__wrapper {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -269,7 +269,7 @@
   color: #394547;
 }
 
-/* REVIEWS */
+
 .reviews__wrapper {
   max-width: 600px;
   margin: 0 auto;
@@ -311,7 +311,7 @@
   justify-content: center;
 }
 
-/* NUMBERS */
+
 .numbers {
   background-color: #d7e9ff;
   display: flex;
