@@ -4,6 +4,8 @@ import { auth, googleProvider } from "@/lib/firebase";
 import { useState, FormEvent } from "react";
 import { close, setMode, setError } from "@/redux/authModalSlice";
 import styles from "../styles/Auth.module.css";
+import { FaUser } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -18,22 +20,24 @@ export default function AuthModal() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loadingButton, setLoadingButtton] = useState<
+    "guest" | "google" | "cta" | "forgot" | null
+  >(null);
 
   if (!isOpen) return null;
 
   const redirectHome = () => {
     if (router.pathname === "/") {
-      router.push("/for-you")
+      router.push("/for-you");
     }
   };
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     dispatch(setError(null));
 
     try {
+      setLoadingButtton(mode === "forgot" ? "forgot" : "cta");
       if (mode === "login") {
         await signInWithEmailAndPassword(auth, email, password);
       } else if (mode === "signup") {
@@ -41,7 +45,6 @@ export default function AuthModal() {
       } else {
         await sendPasswordResetEmail(auth, email);
         dispatch(setError("Reset link sent. Check your email."));
-        setLoading(false);
         return;
       }
       dispatch(close());
@@ -49,13 +52,13 @@ export default function AuthModal() {
     } catch (err: any) {
       dispatch(setError(err.message));
     } finally {
-      setLoading(false);
+      setLoadingButtton(null);
     }
   };
 
   const loginWithGoogle = async () => {
     try {
-      setLoading(true);
+      setLoadingButtton("google");
       dispatch(setError(null));
       await signInWithPopup(auth, googleProvider);
       dispatch(close());
@@ -63,13 +66,13 @@ export default function AuthModal() {
     } catch (err: any) {
       dispatch(setError(err.message));
     } finally {
-      setLoading(false);
+      setLoadingButtton(null);
     }
   };
 
   const loginAsGuest = async () => {
     try {
-      setLoading(true);
+      setLoadingButtton("guest");
       dispatch(setError(null));
       await signInAnonymously(auth);
       dispatch(close());
@@ -77,7 +80,7 @@ export default function AuthModal() {
     } catch (err: any) {
       dispatch(setError(err.message));
     } finally {
-      setLoading(false);
+      setLoadingButtton(null);
     }
   };
 
@@ -104,9 +107,16 @@ export default function AuthModal() {
             <button
               className={styles.primaryBtn}
               onClick={loginAsGuest}
-              disabled={loading}
+              disabled={loadingButton !== null}
             >
-              <span className={styles.btnIcon}></span> Login as a Guest
+              <span className={styles.btnIcon}>
+                <FaUser />
+              </span>
+              {loadingButton === "guest" ? (
+                <span className={styles.spinnner}></span>
+              ) : (
+                "Login as a Guest"
+              )}
             </button>
 
             <div className={styles.divider}>
@@ -116,10 +126,18 @@ export default function AuthModal() {
             <button
               className={styles.primaryBtn}
               onClick={loginWithGoogle}
-              disabled={loading}
+              disabled={loadingButton !== null}
             >
-              <span className={styles.googleIcon}>G</span>{" "}
-              {mode === "signup" ? "Sign up with Google" : "Login with Google"}
+              <span className={styles.googleIcon}>
+                <FcGoogle />
+              </span>
+              {loadingButton === "google" ? (
+                <span className={styles.spinner}></span>
+              ) : mode === "signup" ? (
+                "Sign up with Google"
+              ) : (
+                "Login with Google"
+              )}
             </button>
             <div className={styles.divider}>
               <span>or</span>
@@ -146,12 +164,18 @@ export default function AuthModal() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <button className={styles.cta} type="submit" disabled={loading}>
-                {loading
-                  ? "Please wait..."
-                  : mode === "signup"
-                  ? "Sign Up"
-                  : "Login"}
+              <button
+                className={styles.cta}
+                type="submit"
+                disabled={loadingButton !== null}
+              >
+                {loadingButton === "cta" ? (
+                  <span className={styles.spinner}></span>
+                ) : mode === "signup" ? (
+                  "Sign Up"
+                ) : (
+                  "Login"
+                )}
               </button>
             </>
           ) : (
@@ -164,8 +188,16 @@ export default function AuthModal() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <button className={styles.cta} type="submit" disabled={loading}>
-                {loading ? "Sending..." : "Send reset password link"}
+              <button
+                className={styles.cta}
+                type="submit"
+                disabled={loadingButton !== null}
+              >
+                {loadingButton === "forgot" ? (
+                  <span className={styles.spinner}></span>
+                ) : (
+                  "Send reset password link"
+                )}
               </button>
             </>
           )}

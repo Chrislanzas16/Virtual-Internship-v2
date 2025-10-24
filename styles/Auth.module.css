@@ -64,21 +64,24 @@
 }
 
 .btnIcon{
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 18px;
     text-align: center;
+    font-size: 16px;
+   
 }
 
 .googleIcon{
-    display:inline-grid;
-    place-items: center;
-    width: 18px;
-    height: 18px;
-    border-radius: 3px;
-    background: #ffffff;
-    color: #2d68ff;
-    font-weight: 700;
-    font-size: 12px;
+   font-size: 18px;
+   
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: #fff;
+   border-radius: 5px;
+   padding: 2px;
 }
 
 .divider{
@@ -176,4 +179,25 @@
     .title{font-size: 18px;}
 }
 
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+.spinner{
+    display: inline-block;
+    box-sizing: border-box;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
 
