@@ -19,7 +19,9 @@ import {
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
-export default function Sidebar() {
+type Props = {isOpen: boolean}
+
+export default function Sidebar({isOpen}: Props ) {
   const dispatch = useAppDispatch();
   const isAuthed = useAppSelector(selectIsAuthed);
   const loading = useAppSelector(selectAuthLoading);
@@ -35,7 +37,7 @@ export default function Sidebar() {
   };
   return (
     <>
-      <div className={styles.sidebar}>
+      <div className={`${styles.sidebar} ${isOpen ? styles["sidebar--opened"] : " "} `}>
         <img
           className={styles.sidebar__logo}
           src="https://summarist.vercel.app/_next/static/media/logo.1b1c490b.png"

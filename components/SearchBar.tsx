@@ -1,7 +1,13 @@
 import { FaSearch } from "react-icons/fa";
+import { HiMenu } from "react-icons/hi";
 import styles from "@/styles/SearchBar.module.css";
 
-export default function SearchBar() {
+type Props = {
+  onToggleSidebar?: () => void;
+}
+
+
+export default function SearchBar({onToggleSidebar}: Props) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.search__background}>
@@ -20,6 +26,11 @@ export default function SearchBar() {
                 </div>
               </div>
             </div>
+
+           <div className="sidebar_toggle__btn" onClick={onToggleSidebar}>
+            <HiMenu size={24} />
+           </div>
+
           </div>
         </div>
       </div>

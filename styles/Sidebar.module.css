@@ -64,3 +64,15 @@
 .sidebar__link--not-allowed{
     cursor: not-allowed;
 }
+
+@media (max-width:768px){
+  .sidebar{
+    transform: translateX(-100%);
+  }
+  .sidebar--opened{
+    transform: translateX(0);
+    width: 80%;
+  }
+
+  
+}
