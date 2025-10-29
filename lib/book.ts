@@ -11,7 +11,7 @@ async function api<T>(path: string): Promise<T>{
 export function getBooks(status: "selected"): Promise<Book>;
 export function getBooks(status: "recommended" | "suggested"): Promise<Book[]>;
 export function getBooks(status: Status){
-    return api<any>(`/getBooks?status=${status}`)
+    return api<Book | Book[]>(`/getBooks?status=${status}`)
 }
 
 export const getBookById = () => (id: string) => api<Book>(`/getBook?id=${id}`);

@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export type UserInfo = {uid: string; email: string | null} | null;
 
 type AuthState = {user: UserInfo; loading: boolean};
-const initialState: AuthState = { user: null, loading:false}
+const initialState: AuthState = { user: null, loading:true}
 
 export const authSlice = createSlice ({
     name: "auth",

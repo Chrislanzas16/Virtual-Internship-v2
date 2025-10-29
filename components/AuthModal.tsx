@@ -113,7 +113,7 @@ export default function AuthModal() {
                 <FaUser />
               </span>
               {loadingButton === "guest" ? (
-                <span className={styles.spinnner}></span>
+                <span className={styles.spinner}></span>
               ) : (
                 "Login as a Guest"
               )}
