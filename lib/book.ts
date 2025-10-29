@@ -14,4 +14,6 @@ export function getBooks(status: Status){
     return api<Book | Book[]>(`/getBooks?status=${status}`)
 }
 
-export const getBookById = () => (id: string) => api<Book>(`/getBook?id=${id}`);
+export function getBookById(id: string): Promise<Book> {
+    return api<Book>(`/getBook?id=${id}`)
+}

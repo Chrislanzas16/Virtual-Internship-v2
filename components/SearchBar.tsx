@@ -5,12 +5,13 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
+
 type Props = {
   onToggleSidebar?: () => void;
 };
 
 interface SearchResult {
-   id: string;
+  id: string;
   title: string;
   author: string;
   imageLink: string;
@@ -20,11 +21,19 @@ export default function SearchBar({ onToggleSidebar }: Props) {
   const [query, setQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const debouncedQuery = useDebounce<string>(query, 300);
+  const [loading, setLoading] = useState(false);
+
+  const handleSelect = () => {
+    setSearchResults([]);
+    setLoading(false)
+    setQuery("");
+  }
+
 
   useEffect(() => {
-    // Fetch data only when the debouncedQuery changes and is not empty
     if (debouncedQuery) {
       const fetchResults = async () => {
+        setLoading(true);
         try {
           const response = await fetch(
             `https://us-central1-summaristt.cloudfunctions.net/getBooksByAuthorOrTitle?search=${debouncedQuery}`
@@ -33,6 +42,8 @@ export default function SearchBar({ onToggleSidebar }: Props) {
           setSearchResults(data);
         } catch (error) {
           console.error("Error fetching search results:", error);
+        } finally {
+          setLoading(false);
         }
       };
       fetchResults();
@@ -59,13 +70,16 @@ export default function SearchBar({ onToggleSidebar }: Props) {
 
                 {debouncedQuery && (
                   <>
-                    {searchResults.length > 0 ? (
+                    {loading ? (
+                      <ul className={styles["search__books--wrapper"]}>Loading...</ul>
+                    ) : searchResults.length > 0 ? (
                       <ul className={styles["search__books--wrapper"]}>
                         {searchResults.map((result) => (
-                          <Link 
-                          key={result.id}
+                          <Link
+                            key={result.id}
                             className={styles["search__book--link"]}
                             href={`/book/${result.id}`}
+                            onClick={handleSelect}
                           >
                             <figure
                               className={styles["book__image--wrapper-search"]}
@@ -98,7 +112,7 @@ export default function SearchBar({ onToggleSidebar }: Props) {
                                     <svg
                                       stroke="currentColor"
                                       fill="currentColor"
-                                      stroke-width="0"
+                                      strokeWidth="0"
                                       viewBox="0 0 24 24"
                                       height="1em"
                                       width="1em"
@@ -119,9 +133,11 @@ export default function SearchBar({ onToggleSidebar }: Props) {
                           </Link>
                         ))}
                       </ul>
-                    ) : ( 
-                     <div className={styles["search__books--wrapper"]}>
-                      <p className={styles["search__empty"]}>No books found</p>
+                    ) : (
+                      <div className={styles["search__books--wrapper"]}>
+                        <p className={styles["search__empty"]}>
+                          No books found
+                        </p>
                       </div>
                     )}
                   </>
