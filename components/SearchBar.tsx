@@ -4,7 +4,7 @@ import styles from "@/styles/SearchBar.module.css";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-
+import { useRouter } from "next/router";
 
 type Props = {
   onToggleSidebar?: () => void;
@@ -22,13 +22,13 @@ export default function SearchBar({ onToggleSidebar }: Props) {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const debouncedQuery = useDebounce<string>(query, 300);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSelect = () => {
     setSearchResults([]);
-    setLoading(false)
+    setLoading(false);
     setQuery("");
-  }
-
+  };
 
   useEffect(() => {
     if (debouncedQuery) {
@@ -71,7 +71,9 @@ export default function SearchBar({ onToggleSidebar }: Props) {
                 {debouncedQuery && (
                   <>
                     {loading ? (
-                      <ul className={styles["search__books--wrapper"]}>Loading...</ul>
+                      <ul className={styles["search__books--wrapper"]}>
+                        Loading...
+                      </ul>
                     ) : searchResults.length > 0 ? (
                       <ul className={styles["search__books--wrapper"]}>
                         {searchResults.map((result) => (
@@ -133,13 +135,13 @@ export default function SearchBar({ onToggleSidebar }: Props) {
                           </Link>
                         ))}
                       </ul>
-                    ) : (
+                    ) : !router.pathname.startsWith("/book") ? (
                       <div className={styles["search__books--wrapper"]}>
                         <p className={styles["search__empty"]}>
                           No books found
                         </p>
                       </div>
-                    )}
+                    ) : null}
                   </>
                 )}
 
