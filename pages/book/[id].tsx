@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { getBookById } from "@/lib/book";
 import { Book } from "@/types/book";
 import styles from "@/styles/BookDetails.module.css";
+import { useAppSelector, useAppDispatch } from "@/redux/store";
+import { selectIsAuthed, selectAuthLoading } from "@/redux/authSlice";
+import { open } from "@/redux/authModalSlice";
 
 export default function BookDetails() {
   const router = useRouter();
@@ -10,6 +13,30 @@ export default function BookDetails() {
 
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
+  const isLoggedIn = useAppSelector(selectIsAuthed);
+  const authLoading = useAppSelector(selectAuthLoading);
+  const dispatch = useAppDispatch();
+  const userIsSubscribed = false;
+
+  const handleReadOrListen = () => {
+    if (!isLoggedIn) {
+      dispatch(open());
+      return;
+    }
+    if (book?.subscriptionRequired && !userIsSubscribed) {
+      router.push("/choose-plan");
+    } else {
+      router.push(`/player/${book?.id}`);
+    }
+  };
+
+  const handleAddToLibrary = () => {
+    if (!isLoggedIn) {
+      dispatch(open());
+      return;
+    }
+    console.log("Book saved:", book);
+  };
 
   useEffect(() => {
     if (!router.isReady || !id) return;
@@ -35,7 +62,10 @@ export default function BookDetails() {
         {book && (
           <div className={styles.inner__wrapper}>
             <div className={styles.inner__book}>
-              <div className={styles["inner-book__title"]}>{book.title}</div>
+              <div className={styles["inner-book__title"]}>
+                {book.title}{" "}
+                {book.subscriptionRequired && !isLoggedIn && "(Premium)"}
+              </div>
               <div className={styles["inner-book__author"]}>{book.author}</div>
               <div className={styles["inner-book__sub--title"]}>
                 {book.subTitle}
@@ -125,7 +155,10 @@ export default function BookDetails() {
               </div>
 
               <div className={styles["inner-book__read--btn-wrapper"]}>
-                <button className={styles["inner-book__read--btn"]}>
+                <button
+                  className={styles["inner-book__read--btn"]}
+                  onClick={handleReadOrListen}
+                >
                   <div className={styles["inner-book__read--icon"]}>
                     <svg
                       stroke="currentColor"
@@ -141,7 +174,10 @@ export default function BookDetails() {
                   </div>
                   <div className={styles["inner-book__read--text"]}>Read</div>
                 </button>
-                <button className={styles["inner-book__read--btn"]}>
+                <button
+                  className={styles["inner-book__read--btn"]}
+                  onClick={handleReadOrListen}
+                >
                   <div className={styles["inner-book__read--icon"]}>
                     <svg
                       stroke="currentColor"
@@ -159,7 +195,10 @@ export default function BookDetails() {
                 </button>
               </div>
 
-              <div className={styles["inner-book__bookmark"]}>
+              <button
+                className={styles["inner-book__bookmark"]}
+                onClick={handleAddToLibrary}
+              >
                 <div className={styles["inner-book__bookmark--icon"]}>
                   <svg
                     stroke="currentColor"
@@ -176,7 +215,7 @@ export default function BookDetails() {
                 <div className={styles["inner-book__bookmark--text"]}>
                   Add title to My Library
                 </div>
-              </div>
+              </button>
               <div className={styles["inner-book__secondary--title"]}>
                 What's it about?
               </div>

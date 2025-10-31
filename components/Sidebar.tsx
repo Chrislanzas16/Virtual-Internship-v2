@@ -19,9 +19,12 @@ import {
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
-type Props = {isOpen: boolean}
+type Props = {
+  isOpen: boolean,
+  className?:string
+}
 
-export default function Sidebar({isOpen}: Props ) {
+export default function Sidebar({isOpen, className= ""}: Props ) {
   const dispatch = useAppDispatch();
   const isAuthed = useAppSelector(selectIsAuthed);
   const loading = useAppSelector(selectAuthLoading);
@@ -37,7 +40,7 @@ export default function Sidebar({isOpen}: Props ) {
   };
   return (
     <>
-      <div className={`${styles.sidebar} ${isOpen ? styles["sidebar--opened"] : " "} `}>
+      <div className={`${styles.sidebar} ${isOpen ? styles["sidebar--opened"] : " "} ${className} `}>
         <img
           className={styles.sidebar__logo}
           src="https://summarist.vercel.app/_next/static/media/logo.1b1c490b.png"
@@ -63,7 +66,7 @@ export default function Sidebar({isOpen}: Props ) {
               <div className={styles["sidebar__icon--wrapper"]}>
                 <HiOutlineBookmark size={22} />
               </div>
-              <div className={styles["sidebar__link--text"]}>Library</div>
+              <div className={styles["sidebar__link--text"]}>My Library</div>
             </Link>
 
             <div

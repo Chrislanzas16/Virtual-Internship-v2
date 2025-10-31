@@ -81,6 +81,10 @@
   transition: opacity 0.2s;
 }
 
+.inner-book__read--btn:hover{
+  opacity: .8;
+}
+
 .inner-book__read--icon {
   display: flex;
 }

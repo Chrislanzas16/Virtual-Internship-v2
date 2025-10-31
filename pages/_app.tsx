@@ -9,25 +9,23 @@ import { setUser, startLoading } from "@/redux/authSlice";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
-
-function AuthGate (){
+function AuthGate() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(startLoading());
 
     const unsub = onAuthStateChanged(auth, (fbUser) => {
-      if (fbUser){
-        dispatch(setUser({uid: fbUser.uid, email: fbUser.email}));
+      if (fbUser) {
+        dispatch(setUser({ uid: fbUser.uid, email: fbUser.email }));
       } else {
-        dispatch(setUser(null))
+        dispatch(setUser(null));
       }
     });
     return () => unsub();
-  },[dispatch])
+  }, [dispatch]);
   return null;
 }
-
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

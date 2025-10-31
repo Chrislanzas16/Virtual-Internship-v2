@@ -2,10 +2,13 @@ import Sidebar from "@/components/Sidebar";
 import SearchBar from "@/components/SearchBar";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import styles from "@/styles/Sidebar.module.css";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const hideOn = ["/"];
   const showHeader = !hideOn.includes(useRouter().pathname);
+  const { pathname } = useRouter();
+  const onPlayer = pathname.startsWith("/player");
 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   return (
@@ -21,7 +24,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         ></div>
       )}
 
-      {showHeader && <Sidebar isOpen={isSidebarOpen} />}
+      {showHeader && (
+        <Sidebar
+          isOpen={isSidebarOpen}
+          className={onPlayer ? styles["sidebar--lifted"] : ""}
+        />
+      )}
 
       <div className={`wrapper ${!showHeader ? "wrapper--full" : ""}`}>
         {children}
