@@ -40,13 +40,17 @@ export default function Sidebar({isOpen, className= ""}: Props ) {
   };
   return (
     <>
-      <div className={`${styles.sidebar} ${isOpen ? styles["sidebar--opened"] : " "} ${className} `}>
+      <div className={`${styles.sidebar} ${isOpen ? styles["sidebar--opened"] : " "} ${className} `}
+      style={className.includes("sidebar--lifted") ? {overflow: "hidden"} : undefined}
+      >
         <img
           className={styles.sidebar__logo}
           src="https://summarist.vercel.app/_next/static/media/logo.1b1c490b.png"
           alt="logo"
         />
-        <div className={styles.sidebar__wrapper}>
+        <div className={styles.sidebar__wrapper}
+        style={className.includes("sidebar--lifted") ? {height: "100%", paddingBottom: 60} : undefined}
+        >
           <div className={styles.sidebar__top}>
             <Link
               href={"/for-you"}
