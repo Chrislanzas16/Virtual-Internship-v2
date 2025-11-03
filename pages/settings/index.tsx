@@ -1,6 +1,6 @@
 import styles from "@/styles/Settings.module.css";
 import Link from "next/link";
-import { selectIsAuthed } from "@/redux/authSlice";
+import { selectIsAuthed, selectUserEmail } from "@/redux/authSlice";
 import { open } from "@/redux/authModalSlice";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
 import loginImage from "@/public/login.webp";
@@ -9,6 +9,10 @@ import Image from "next/image";
 export default function Settings() {
   const isLoggedIn = useAppSelector(selectIsAuthed);
   const dispatch = useAppDispatch();
+  const userEmail = useAppSelector(selectUserEmail);
+
+  type Plan = "basic" | "premium" | "premium-plus" 
+  let userPlan = "basic" as Plan;
 
   return (
     <div className="container">
@@ -25,7 +29,7 @@ export default function Settings() {
             <div className={styles["settings__login--text"]}>
               Log in to your account to see your details.
             </div>
-            <button 
+            <button
               onClick={() => dispatch(open())}
               className={`${styles["settings__login--btn"]} ${styles["btn"]}`}
             >
@@ -38,14 +42,32 @@ export default function Settings() {
               <div className={styles["settings__sub--title"]}>
                 Your Subscription Plan
               </div>
-              <div className={styles.settings__text}>Basic</div>
-              <Link href={"/choose-plan"} className={`${styles["settings__upgrade--btn"]} ${styles["btn"]}`} >
-              Upgrade to Premium
-              </Link>
+              {userPlan === "basic" && (
+                <>
+                  <div className={styles.settings__text}>Basic</div>
+                  <Link
+                    href={"/choose-plan"}
+                    className={`${styles["settings__upgrade--btn"]} ${styles["btn"]}`}
+                  >
+                    Upgrade to Premium
+                  </Link>
+                </>
+              )}
+
+              {userPlan === "premium" && (
+                <div className={styles.settings__text}>Premium</div>
+              )}
+
+              {userPlan === "premium-plus" && (
+                <div className={styles.settings__text}>Premium Plus</div>
+              )}
+
             </div>
             <div className={styles.setting__content}>
               <div className={styles["settings__sub--title"]}>Email</div>
-              <div className={styles.settings__text}>Email</div>
+              <div className={styles.settings__text}>
+                {userEmail ?? "guest@summarist.app"}
+              </div>
             </div>
           </>
         )}

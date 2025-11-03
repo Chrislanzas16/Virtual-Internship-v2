@@ -18,4 +18,6 @@ export const authSlice = createSlice ({
 export const {setUser, startLoading,logoutLocal} = authSlice.actions;
 export const selectIsAuthed = (state: {auth: AuthState}) => Boolean(state.auth.user);
 export const selectAuthLoading = (state: { auth: AuthState}) => state.auth.loading;
+export const selectUser = (state: { auth: AuthState}) => state.auth.user;
+export const selectUserEmail = (state: { auth: AuthState}) => state.auth.user?.email ?? null
 export default authSlice.reducer
