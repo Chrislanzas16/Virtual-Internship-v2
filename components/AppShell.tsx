@@ -5,7 +5,7 @@ import { useState } from "react";
 import styles from "@/styles/Sidebar.module.css";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
-  const hideOn = ["/"];
+  const hideOn = ["/", "/choose-plan"];
   const showHeader = !hideOn.includes(useRouter().pathname);
   const { pathname } = useRouter();
   const onPlayer = pathname.startsWith("/player");
