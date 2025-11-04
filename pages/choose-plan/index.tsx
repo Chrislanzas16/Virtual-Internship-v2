@@ -9,7 +9,7 @@ export default function ChoosePlan() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const openAccordion = (index: number) => {
-    setOpenIndex(prev => (prev === index ? null : index))
+    setOpenIndex((prev) => (prev === index ? null : index));
   };
 
   const handlePlanChange = (plan: Plan) => {
@@ -167,8 +167,9 @@ export default function ChoosePlan() {
           </div>
           <div className={styles.faq__wrapper}>
             <div className={styles.accordion__card}>
-              <div className={styles.accordion__header}
-              onClick={()=> openAccordion(0)}
+              <div
+                className={styles.accordion__header}
+                onClick={() => openAccordion(0)}
               >
                 <div className={styles.accordion__title}>
                   How does the free 7-day trial work?
@@ -178,7 +179,9 @@ export default function ChoosePlan() {
                   fill="currentColor"
                   strokeWidth="0"
                   viewBox="0 0 16 16"
-                  className={`${styles.accordion__icon} ${openIndex === 0 ? styles["accordion__icon--rotate"] : ""}`}
+                  className={`${styles.accordion__icon} ${
+                    openIndex === 0 ? styles["accordion__icon--rotate"] : ""
+                  }`}
                   height="1em"
                   width="1em"
                   xmlns="http://www.w3.org/2000/svg"
@@ -189,7 +192,10 @@ export default function ChoosePlan() {
                   ></path>
                 </svg>
               </div>
-              <div className={styles.collapse} style={{ height: openIndex === 0 ? 96 : 0 }}>
+              <div
+                className={styles.collapse}
+                style={{ height: openIndex === 0 ? 96 : 0 }}
+              >
                 <div className={styles.accordion__body}>
                   Begin your complimentary 7-day trial with a Summarist annual
                   membership. You are under no obligation to continue your
@@ -202,8 +208,9 @@ export default function ChoosePlan() {
               </div>
             </div>
             <div className={styles.accordion__card}>
-              <div className={styles.accordion__header}
-              onClick={()=> openAccordion(1)}
+              <div
+                className={styles.accordion__header}
+                onClick={() => openAccordion(1)}
               >
                 <div className={styles.accordion__title}>
                   Can I switch subscriptions from monthly to yearly, or yearly
@@ -214,7 +221,9 @@ export default function ChoosePlan() {
                   fill="currentColor"
                   strokeWidth="0"
                   viewBox="0 0 16 16"
-                 className={`${styles.accordion__icon} ${openIndex === 1 ? styles["accordion__icon--rotate"] : ""}`}
+                  className={`${styles.accordion__icon} ${
+                    openIndex === 1 ? styles["accordion__icon--rotate"] : ""
+                  }`}
                   height="1em"
                   width="1em"
                   xmlns="http://www.w3.org/2000/svg"
@@ -225,7 +234,10 @@ export default function ChoosePlan() {
                   ></path>
                 </svg>
               </div>
-              <div className={styles.collapse} style={{height: openIndex === 1 ? 72 : 0  }}>
+              <div
+                className={styles.collapse}
+                style={{ height: openIndex === 1 ? 72 : 0 }}
+              >
                 <div className={styles.accordion__body}>
                   While an annual plan is active, it is not feasible to switch
                   to a monthly plan. However, once the current month ends,
@@ -235,8 +247,9 @@ export default function ChoosePlan() {
               </div>
             </div>
             <div className={styles.accordion__card}>
-              <div className={styles.accordion__header}
-              onClick={()=> openAccordion(2)}
+              <div
+                className={styles.accordion__header}
+                onClick={() => openAccordion(2)}
               >
                 <div className={styles.accordion__title}>
                   What's included in the Premium plan?
@@ -246,7 +259,9 @@ export default function ChoosePlan() {
                   fill="currentColor"
                   strokeWidth="0"
                   viewBox="0 0 16 16"
-                  className={`${styles.accordion__icon} ${openIndex === 2 ? styles["accordion__icon--rotate"] : ""}`}
+                  className={`${styles.accordion__icon} ${
+                    openIndex === 2 ? styles["accordion__icon--rotate"] : ""
+                  }`}
                   height="1em"
                   width="1em"
                   xmlns="http://www.w3.org/2000/svg"
@@ -257,7 +272,10 @@ export default function ChoosePlan() {
                   ></path>
                 </svg>
               </div>
-              <div className={styles.collapse} style={{ height: openIndex === 2 ? 72 : 0  }}>
+              <div
+                className={styles.collapse}
+                style={{ height: openIndex === 2 ? 72 : 0 }}
+              >
                 <div className={styles.accordion__body}>
                   Premium membership provides you with the ultimate Summarist
                   experience, including unrestricted entry to many best-selling
@@ -268,8 +286,9 @@ export default function ChoosePlan() {
               </div>
             </div>
             <div className={styles.accordion__card}>
-              <div className={styles.accordion__header}
-              onClick={()=> openAccordion(3)}
+              <div
+                className={styles.accordion__header}
+                onClick={() => openAccordion(3)}
               >
                 <div className={styles.accordion__title}>
                   Can I cancel during my trial or subscription?
@@ -279,7 +298,9 @@ export default function ChoosePlan() {
                   fill="currentColor"
                   strokeWidth="0"
                   viewBox="0 0 16 16"
-                  className={`${styles.accordion__icon} ${openIndex === 3 ? styles["accordion__icon--rotate"] : ""}`}
+                  className={`${styles.accordion__icon} ${
+                    openIndex === 3 ? styles["accordion__icon--rotate"] : ""
+                  }`}
                   height="1em"
                   width="1em"
                   xmlns="http://www.w3.org/2000/svg"
@@ -290,7 +311,10 @@ export default function ChoosePlan() {
                   ></path>
                 </svg>
               </div>
-              <div className={styles.collapse} style={{ height: openIndex === 3 ? 72 : 0  }}>
+              <div
+                className={styles.collapse}
+                style={{ height: openIndex === 3 ? 72 : 0 }}
+              >
                 <div className={styles.accordion__body}>
                   You will not be charged if you cancel your trial before its
                   conclusion. While you will not have complete access to the
@@ -302,7 +326,117 @@ export default function ChoosePlan() {
           </div>
         </div>
       </div>
-      <section id="footer"></section>
+      <section id="footer" className={styles.footer}>
+        <div className="container">
+          <div className="row">
+            <div className={styles["footer__top--wrapper"]}>
+              <div className={styles.footer__block}>
+                <div className={styles["footer__link--title"]}>Actions</div>
+                <div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Summarist Magazine
+                    </a>
+                  </div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Cancel Subscription
+                    </a>
+                  </div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Help
+                    </a>
+                  </div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Contact us
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.footer__block}>
+                  <div className={styles["footer__link--title"]}>Useful Links</div>
+                <div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Pricing
+                    </a>
+                  </div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Summarist Business
+                    </a>
+                  </div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Gift Cards
+                    </a>
+                  </div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Authors & Publishers
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.footer__block}>
+                  <div className={styles["footer__link--title"]}>Company</div>
+                <div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      About
+                    </a>
+                  </div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Careers
+                    </a>
+                  </div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                     Partners
+                    </a>
+                  </div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Code of Conduct
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.footer__block}>
+                  <div className={styles["footer__link--title"]}>Other</div>
+                <div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Sitemap
+                    </a>
+                  </div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Legal Notice
+                    </a>
+                  </div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                     Terms of Service
+                    </a>
+                  </div>
+                  <div className={styles["footer__link--wrapper"]}>
+                    <a href="/" className={styles["footer__link"]}>
+                      Privacy Policies
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles["footer__copyright--wrapper"]}>
+                <div className={styles.footer__copyright}>Copyright &copy; 2025 Summarist.</div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
