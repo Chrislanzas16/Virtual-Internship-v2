@@ -180,3 +180,37 @@
     transform: rotate(360deg);
   }
 }
+
+@media (max-width: 768px){
+  .wrapper{
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .summary{
+        height: calc(100vh - 260px);
+  }
+
+  .audio__book--summary-title{
+    font-size: 20px;
+  }
+
+  .audio__book--summary-text{
+    font-size: 14px;
+  }
+
+  .audio__wrapper{
+        height: 180px;
+    padding: 16px 24px;
+    flex-direction: column;
+  }
+
+  .audio__wrapper>div {
+        width: 100%;
+    justify-content: center;
+  }
+
+  .audio__track--img-mask{
+        max-width: 80px;
+  }
+}

@@ -82,3 +82,9 @@
 .skeleton {
   background-color: #e4e4e4;
 }
+
+@media(max-width:768px){
+  .section__title{
+    font-size: 24px;
+  }
+}
