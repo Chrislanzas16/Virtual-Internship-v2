@@ -78,3 +78,7 @@
 .btn.settings__upgrade--btn {
   width: fit-content;
 }
+
+.skeleton {
+  background-color: #e4e4e4;
+}

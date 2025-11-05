@@ -156,3 +156,27 @@
   background: #ffffff;
   border: none;
 }
+
+.audio__book--spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.audio__book--spinner svg {
+  width: 64px;
+  height: 64px;
+  color: #032b41;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

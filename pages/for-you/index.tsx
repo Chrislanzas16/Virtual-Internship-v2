@@ -17,6 +17,7 @@ export default function ForYou() {
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
       try {
         const [sel, recs, sugg] = await Promise.all([
           getBooks("selected"),
@@ -37,11 +38,82 @@ export default function ForYou() {
     })();
   }, []);
 
+  const skeletonStyles = [
+    { width: "100%", height: "240px", marginBottom: "8px" },
+    { width: "100%", height: "20px", marginBottom: "8px" },
+    { width: "90%", height: "16px", marginBottom: "8px" },
+    { width: "80%", height: "32px", marginBottom: "8px" },
+    { width: "90%", height: "16px" },
+  ];
+
+  if (loading) {
+    return (
+      <div className="row">
+        <div className="container">
+          <div className={styles.foryou__wrapper}>
+            <div className={styles["for-you__title"]}>
+              Selected just for you
+            </div>
+            <div className={styles["selected__book--skeleton"]}></div>
+            <div>
+              <div className={styles["for-you__title"]}>
+                Recommended For You
+              </div>
+              <div className={styles["for-you__sub--title"]}>
+                We think you'll like these
+              </div>
+              <div className={styles["recommended__books--skeleton-wrapper"]}>
+                {Array.from({ length: 5 }).map((_, cardIndex) => (
+                  <div
+                    key={cardIndex}
+                    className={styles["recommended__books--skeleton"]}
+                  >
+                    {skeletonStyles.map((style, i) => (
+                      <div
+                        key={i}
+                        className={styles.skeleton}
+                        style={style}
+                      ></div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+               <div className={styles["for-you__title"]}>Suggested Books</div>
+            <div className={styles["for-you__sub--title"]}>
+              Browse those books
+            </div>
+             <div className={styles["recommended__books--skeleton-wrapper"]}>
+                {Array.from({ length: 5 }).map((_, cardIndex) => (
+                  <div
+                    key={cardIndex}
+                    className={styles["recommended__books--skeleton"]}
+                  >
+                    {skeletonStyles.map((style, i) => (
+                      <div
+                        key={i}
+                        className={styles.skeleton}
+                        style={style}
+                      ></div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="row">
       <div className="container">
         <div className={styles.foryou__wrapper}>
           <div className={styles["for-you__title"]}>Selected just for you</div>
+
           {selected && (
             <Link
               className={styles.selected__book}

@@ -42,8 +42,8 @@ export default function BookDetails() {
     if (!router.isReady || !id) return;
 
     const fetchBook = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
         const data = await getBookById(id);
         setBook(data);
       } catch (e) {
@@ -55,6 +55,41 @@ export default function BookDetails() {
     };
     fetchBook();
   }, [router.isReady, id]);
+
+  const skeletonStyles = [
+    { width: "70%", height: "32px", marginBottom: "16px" },
+    { width: "40%", height: "32px", marginBottom: "16px" },
+    { width: "100%", height: "32px", marginBottom: "16px" },
+    { width: "45%", height: "64px", marginBottom: "16px" },
+    { width: "50%", height: "32px", marginBottom: "16px" },
+    { width: "20%", height: "32px", marginBottom: "16px" },
+    { width: "50%", height: "64px", marginBottom: "16px" },
+    { width: "80%", height: "180px", marginBottom: "16px" },
+    { width: "80%", height: "268px" },
+  ];
+
+  if (loading) {
+    return (
+      <div className="row">
+        <div className="container">
+          <div className={styles["inner__book--skeleton"]}>
+            <div className={styles["inner__book--skeleton-content"]}>
+              {skeletonStyles.map((style, i) => (
+                <div key={i} className={styles.skeleton} style={style}></div>
+              ))}
+            </div>
+
+            <div className={styles["inner__book--skeleton-img"]}>
+              <div
+                className={styles.skeleton}
+                style={{ width: 300, height: 300, marginBottom: 16 }}
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="row">

@@ -52,6 +52,8 @@ export default function SearchBar({ onToggleSidebar }: Props) {
     }
   }, [debouncedQuery]);
 
+
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.search__background}>
@@ -72,7 +74,11 @@ export default function SearchBar({ onToggleSidebar }: Props) {
                   <>
                     {loading ? (
                       <ul className={styles["search__books--wrapper"]}>
-                        Loading...
+                        <div className={styles.skeleton} style={{width: "100%", height:120, marginBottom: 8}}></div>
+                        <div className={styles.skeleton} style={{width: "100%", height:120, marginBottom: 8}}></div>
+                        <div className={styles.skeleton} style={{width: "100%", height:120, marginBottom: 8}}></div>
+                        <div className={styles.skeleton} style={{width: "100%", height:120, marginBottom: 8}}></div>
+                        <div className={styles.skeleton} style={{width: "100%", height:120}}></div>
                       </ul>
                     ) : searchResults.length > 0 ? (
                       <ul className={styles["search__books--wrapper"]}>
