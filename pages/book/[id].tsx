@@ -45,7 +45,26 @@ export default function BookDetails() {
       setLoading(true);
       try {
         const data = await getBookById(id);
-        setBook(data);
+
+        let bookWithDuration = data;
+        if (data?.audioLink) {
+          const audio = new Audio(data.audioLink);
+          audio.preload = "metadata";
+
+          const seconds: number = await new Promise((resolve) => {
+            audio.addEventListener("loadedmetadata", () => {
+              resolve(audio.duration || 0);
+            });
+          });
+          const mins = Math.floor(seconds / 60);
+          const secs = Math.floor(seconds % 60);
+          const formatted = `${mins.toString().padStart(2, "0")}:${secs
+            .toString()
+            .padStart(2, "0")}`;
+          bookWithDuration = { ...data, duration: formatted };
+        }
+
+        setBook(bookWithDuration);
       } catch (e) {
         console.error("Error loding book:", e);
         setBook(null);
@@ -143,7 +162,9 @@ export default function BookDetails() {
                         <path d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"></path>
                       </svg>
                     </div>
-                    <div className={styles["inner-book__duration"]}></div>
+                    <div className={styles["inner-book__duration"]}>
+                      {book.duration}
+                    </div>
                   </div>
                   <div className={styles["inner-book__description"]}>
                     <div className={styles["inner-book__icon"]}>

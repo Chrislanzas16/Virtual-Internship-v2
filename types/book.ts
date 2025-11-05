@@ -15,6 +15,7 @@ export type Book = {
     tags: string[];
     bookDescription: string;
     authorDescription: string;
+    duration?: string
 }
 
 export type Status = "selected" | "recommended" | "suggested";

@@ -25,11 +25,32 @@ export default function ForYou() {
           getBooks("suggested"),
         ]);
 
+        const getDuration = async (book:Book) => {
+          if (!book.audioLink) return {...book, duration: ""};
+          const audio = new Audio(book.audioLink);
+          audio.preload = "metadata";
+
+          const seconds:number = await new Promise((resolve) => {
+            audio.addEventListener("loadedmetadata", () => {
+              resolve(audio.duration || 0)
+            })
+          })
+          const mins = Math.floor(seconds / 60);
+          const secs = Math.floor(seconds % 60);
+          const formatted = `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
+               return {  ...book, duration: formatted};
+        };
+        
+
         const selectedBook = Array.isArray(sel) ? sel[0] : sel;
 
-        setSelected(selectedBook);
-        setRecommended(recs);
-        setSuggested(sugg);
+        const recsWithDuration = await Promise.all(recs.map(getDuration));
+        const suggWithDuration = await Promise.all(sugg.map(getDuration));
+        const selectedWithDuration = selectedBook ? await getDuration(selectedBook) : null
+
+        setSelected(selectedWithDuration);
+        setRecommended(recsWithDuration);
+        setSuggested(suggWithDuration);
       } catch (e: any) {
         setErr(e.message ?? "Failed to load");
       } finally {
@@ -152,7 +173,7 @@ export default function ForYou() {
                         <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
                       </svg>
                     </div>
-                    <div className={styles["selected__book--duration"]}></div>
+                    <div className={styles["selected__book--duration"]}>{selected.duration}</div>
                   </div>
                 </div>
               </div>
@@ -211,7 +232,7 @@ export default function ForYou() {
                       </div>
                       <div
                         className={styles["recommended__book--details-text"]}
-                      ></div>
+                      >{book.duration}</div>
                     </div>
                     <div className={styles["recommended__book--details"]}>
                       <div
@@ -292,7 +313,7 @@ export default function ForYou() {
                       </div>
                       <div
                         className={styles["recommended__book--details-text"]}
-                      ></div>
+                      >{book.duration}</div>
                     </div>
                     <div className={styles["recommended__book--details"]}>
                       <div
