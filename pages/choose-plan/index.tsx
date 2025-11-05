@@ -2,11 +2,13 @@ import styles from "@/styles/ChoosePlan.module.css";
 import Image from "next/image";
 import priceTop from "@/public/pricing-top.webp";
 import { useState } from "react";
+import { createStripeCheckout, STRIPE_PRICE_IDS } from "@/lib/stripePayment";
 
 export default function ChoosePlan() {
   type Plan = "yearly" | "monthly";
   const [activePlan, setActivePlan] = useState<Plan>("yearly");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false)
 
   const openAccordion = (index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
@@ -145,8 +147,15 @@ export default function ChoosePlan() {
           </div>
           <div className={styles["plan__card--cta"]}>
             <span className={styles["btn--wrapper"]}>
-              <button className={styles.btn}>
-                {activePlan === "yearly" ? (
+              <button className={styles.btn}
+              disabled={loading}
+              onClick={()=> createStripeCheckout(activePlan === "yearly" ? STRIPE_PRICE_IDS.yearly : STRIPE_PRICE_IDS.monthly, setLoading)}
+              style={{cursor: loading ? "not-allowed" : "pointer"}}
+              >
+                {loading ? (
+                    <div className={styles.spinner}></div>
+                ) : 
+                activePlan === "yearly" ? (
                   <span>Start your free 7-day trial</span>
                 ) : (
                   <span>Start your first month</span>
