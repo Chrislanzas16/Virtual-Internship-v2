@@ -6,11 +6,13 @@ import type { AppProps } from "next/app";
 import AppShell from "@/components/AppShell";
 import { useEffect } from "react";
 import { setUser, startLoading } from "@/redux/authSlice";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signInAnonymously } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { useRouter } from "next/router";
 
 function AuthGate() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(startLoading());
@@ -18,6 +20,10 @@ function AuthGate() {
     const unsub = onAuthStateChanged(auth, (fbUser) => {
       if (fbUser) {
         dispatch(setUser({ uid: fbUser.uid, email: fbUser.email }));
+
+        if (router.pathname === "/") {
+          router.replace("/for-you");
+        }
       } else {
         dispatch(setUser(null));
       }

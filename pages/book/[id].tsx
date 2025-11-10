@@ -6,6 +6,8 @@ import styles from "@/styles/BookDetails.module.css";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
 import { selectIsAuthed, selectAuthLoading } from "@/redux/authSlice";
 import { open } from "@/redux/authModalSlice";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function BookDetails() {
   const router = useRouter();
@@ -14,9 +16,10 @@ export default function BookDetails() {
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
   const isLoggedIn = useAppSelector(selectIsAuthed);
-  const authLoading = useAppSelector(selectAuthLoading);
   const dispatch = useAppDispatch();
   const userIsSubscribed = false;
+  const [isSaved, setIsSaved] = useState(false);
+  const user = useAppSelector((state) => state.auth.user);
 
   const handleReadOrListen = () => {
     if (!isLoggedIn) {
@@ -35,8 +38,50 @@ export default function BookDetails() {
       dispatch(open());
       return;
     }
-    console.log("Book saved:", book);
+    if (!book) return;
+
+    try {
+      const existingLibrary = JSON.parse(
+        localStorage.getItem("library") || "[]"
+      );
+      const alreadySaved = existingLibrary.some(
+        (item: any) => item.id === book.id
+      );
+
+      if (!alreadySaved) {
+        const updatedLibrary = [
+          ...existingLibrary,
+          {
+            id: book.id,
+            title: book.title,
+            author: book.author,
+            subTitle: book.subTitle,
+            imageLink: book.imageLink,
+            audioLink: book.audioLink,
+            averageRating: book.averageRating,
+            createdAt: new Date().toISOString(),
+          },
+        ];
+        localStorage.setItem("library", JSON.stringify(updatedLibrary));
+        setIsSaved(true);
+        console.log("Book saved locally:", book.title);
+      } else {
+        const updatedLibrary = existingLibrary.filter((item: any) => item.id !== book.id)
+        localStorage.setItem("library", JSON.stringify(updatedLibrary))
+        setIsSaved(false);
+      }
+    } catch (error) {
+      console.error("Error saving book:", error);
+    }
   };
+
+  useEffect(() => {
+    if (!book) return;
+
+    const savedLibrary = JSON.parse(localStorage.getItem("library") || "[]");
+    const found = savedLibrary.some((item: any) => item.id === book.id)
+    setIsSaved(found)
+  },[book])
 
   useEffect(() => {
     if (!router.isReady || !id) return;
@@ -196,9 +241,9 @@ export default function BookDetails() {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
                         ></path>
                       </svg>
@@ -256,20 +301,34 @@ export default function BookDetails() {
                 onClick={handleAddToLibrary}
               >
                 <div className={styles["inner-book__bookmark--icon"]}>
-                  <svg
-                    stroke="currentColor"
-                    fill="currentColor"
-                    strokeWidth="0"
-                    viewBox="0 0 16 16"
-                    height="1em"
-                    width="1em"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"></path>
-                  </svg>
+                  {isSaved ? (
+                    <svg
+                      stroke="currentColor"
+                      fill="currentColor"
+                      strokeWidth="0"
+                      viewBox="0 0 16 16"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"></path>
+                    </svg>
+                  ) : (
+                    <svg
+                      stroke="currentColor"
+                      fill="currentColor"
+                      strokeWidth="0"
+                      viewBox="0 0 16 16"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"></path>
+                    </svg>
+                  )}
                 </div>
                 <div className={styles["inner-book__bookmark--text"]}>
-                  Add title to My Library
+                  {isSaved ? "Saved in My Library" : "Add title to My Library"}
                 </div>
               </button>
               <div className={styles["inner-book__secondary--title"]}>

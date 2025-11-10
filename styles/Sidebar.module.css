@@ -72,6 +72,7 @@
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
+    padding-bottom: 100px;
   }
   .sidebar--opened {
     transform: translateX(0);
