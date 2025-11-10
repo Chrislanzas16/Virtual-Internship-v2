@@ -15,6 +15,8 @@ interface SearchResult {
   title: string;
   author: string;
   imageLink: string;
+  audioLink:string;
+  duration?:string;
 }
 
 export default function SearchBar({ onToggleSidebar }: Props) {
@@ -39,7 +41,27 @@ export default function SearchBar({ onToggleSidebar }: Props) {
             `https://us-central1-summaristt.cloudfunctions.net/getBooksByAuthorOrTitle?search=${debouncedQuery}`
           );
           const data: SearchResult[] = await response.json();
-          setSearchResults(data);
+
+          const getDuration = async (book: SearchResult): Promise<SearchResult> => {
+            if (!book.audioLink) return {...book, duration: ""};
+
+            const audio = new Audio(book.audioLink);
+            audio.preload = "metadata";
+
+            const seconds:number = await new Promise((resolve) => {
+            audio.addEventListener("loadedmetadata", () => {
+              resolve(audio.duration || 0)
+            });
+          })
+          const mins = Math.floor(seconds / 60);
+          const secs = Math.floor(seconds % 60);
+          const formatted = `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
+               return {  ...book, duration: formatted};
+          };
+          const dataWithDuration = await Promise.all(
+            data.map((book) => getDuration(book))
+          )
+          setSearchResults(dataWithDuration);
         } catch (error) {
           console.error("Error fetching search results:", error);
         } finally {
@@ -134,7 +156,7 @@ export default function SearchBar({ onToggleSidebar }: Props) {
                                     className={
                                       styles["recommended__book--details-text"]
                                     }
-                                  ></div>
+                                  >{result.duration}</div>
                                 </div>
                               </div>
                             </div>
